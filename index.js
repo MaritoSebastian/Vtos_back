@@ -1,10 +1,12 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const fetch = require("node-fetch"); // Asegurate de tenerlo instalado con: npm install node-fetch@2
 
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
+const GOOGLE_SCRIPT_URL= process.env.GOOGLE_SCRIPT_URL;
 console.log("back corriendo puerto:", PORT);
 app.use(cors());
 app.use(express.json());
@@ -21,7 +23,7 @@ app.post("/api/enviar", async (req, res) => {
 
   try {
     const response = await fetch(
-      "https://script.google.com/macros/s/AKfycbzgJfnLRfNXZKRqKOZ-Ps0Mcs0MM8pZtO8aSfmPAtbffZR4RGo_L2xKq2qG8Tpfj43XzA/exec",
+      GOOGLE_SCRIPT_URL,
 
       {
         method: "POST",
@@ -55,7 +57,7 @@ app.post("/api/verificar-usuario", async (req, res) => {
   const datos = req.body;
   try {
     const response = await fetch(
-      "https://script.google.com/macros/s/AKfycbzgJfnLRfNXZKRqKOZ-Ps0Mcs0MM8pZtO8aSfmPAtbffZR4RGo_L2xKq2qG8Tpfj43XzA/exec",
+      GOOGLE_SCRIPT_URL,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -102,8 +104,7 @@ app.post("/api/eliminar", async (req, res) => {
       .json({ success: false, message: "Faltan datos para eliminar" });
   }
   try {
-    const response = await fetch(
-      "https://script.google.com/macros/s/AKfycbzgJfnLRfNXZKRqKOZ-Ps0Mcs0MM8pZtO8aSfmPAtbffZR4RGo_L2xKq2qG8Tpfj43XzA/exec",
+    const response = await fetch(GOOGLE_SCRIPT_URL,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -123,7 +124,7 @@ async function actualizatFilaenSheets(data) {
   const datos = { ...data, destino: "editar" };
   try {
     const response = await fetch(
-      "https://script.google.com/macros/s/AKfycbzgJfnLRfNXZKRqKOZ-Ps0Mcs0MM8pZtO8aSfmPAtbffZR4RGo_L2xKq2qG8Tpfj43XzA/exec",
+      GOOGLE_SCRIPT_URL,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
