@@ -14,7 +14,11 @@ app.use(express.json());
 // Ruta para recibir y reenviar datos a Google Sheets
 app.post("/api/enviar", async (req, res) => {
   const datos = req.body;
-  console.log("Datos recibidos:", datos); // Esto debería aparecer en tu consola
+  if (process.env.NODE_ENV!=="produccion") {
+
+     console.log("Datos recibidos:", datos);
+  }
+
   if (!datos || !datos.destino) {
     return res
       .status(400)
@@ -65,7 +69,7 @@ app.post("/api/verificar-usuario", async (req, res) => {
         redirect: "follow",
       }
     );
-    //const data=await response.json();
+  
     const text = await response.text();
     let data;
     try {
@@ -84,7 +88,13 @@ app.post("/api/verificar-usuario", async (req, res) => {
     if (!data.rol) {
       console.warn("Advertencia: 'rol' no está definido en la respuesta");
     }
-    res.json(data);
+    res.json({
+      email:data.email,
+      rol:data.rol,
+      nombre:data.nombre
+
+
+    });
   } catch (error) {
     console.error("Error verificacion usuario sheets:", error);
     res.status(500).json({ success: false, error: error.message });
