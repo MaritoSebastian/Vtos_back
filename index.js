@@ -14,7 +14,7 @@ app.use(express.json());
 // Ruta para recibir y reenviar datos a Google Sheets
 app.post("/api/enviar", async (req, res) => {
   const datos = req.body;
-  if (process.env.NODE_ENV!=="produccion") {
+  if (process.env.NODE_ENV!=="production") {
 
      console.log("Datos recibidos:", datos);
   }
